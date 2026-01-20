@@ -7,9 +7,16 @@ export type Player = {
 }
 
 export type Enemy = {
-  x: number
-  y: number
-  width: number
-  height: number
-  health: number
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  health: number,
+}
+
+export type Camera = {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
 }

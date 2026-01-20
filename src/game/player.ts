@@ -39,7 +39,7 @@ export function updatePlayer(delta: number) {
   // CLAMP X
   player.x = Math.min(
     Math.max(player.x, 0),
-    gameState.canvas.width - player.width
+    gameState.world.width - player.width
   );
 
   // Y MOVEMENT
@@ -53,7 +53,7 @@ export function updatePlayer(delta: number) {
   // CLAMP Y
   player.y = Math.min(
     Math.max(player.y, 0),
-    gameState.canvas.height - player.height
+    gameState.world.height - player.height
   );
 
 }
