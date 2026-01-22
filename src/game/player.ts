@@ -2,8 +2,53 @@ import { gameState } from "./state";
 import { inputState } from "./input";
 import { rectsOverlap } from "./collision";
 
+const getPlayer = () => gameState.player;
+
+function moveAndCollideAxis(axis: "x" | "y", amount: number) {
+  const player = getPlayer();
+
+  if (amount === 0) return;
+
+  player[axis] += amount;
+
+  for (const obs of gameState.obstacles) {
+    if (!rectsOverlap(player, obs)) continue;
+
+    if (axis === "x") {
+      if (amount > 0) {
+        // moving right
+        player.x = obs.x - player.width;
+      } else {
+        // moving left
+        player.x = obs.x + obs.width;
+      }
+    } else {
+      if (amount > 0) {
+        // moving down
+        player.y = obs.y - player.height;
+      } else {
+        // moving up
+        player.y = obs.y + obs.height;
+      }
+    }
+
+    break; // importante
+  }
+  // CLAMP X
+  player.x = Math.min(
+    Math.max(player.x, 0),
+    gameState.world.width - player.width
+  );
+
+  // CLAMP Y
+  player.y = Math.min(
+    Math.max(player.y, 0),
+    gameState.world.height - player.height
+  );
+}
+
 export function updatePlayer(delta: number) {
-  const player = gameState.player;
+  const player = getPlayer();
 
   // movimento
 
@@ -27,33 +72,7 @@ export function updatePlayer(delta: number) {
   const moveX = dirX * player.speed * delta;
   const moveY = dirY * player.speed * delta;
 
-
-  // X MOVEMENT
-  player.x += moveX
-  for (const obs of gameState.obstacles) {
-    if (rectsOverlap(player, obs)) {
-      player.x -= moveX;
-      break;
-    }
-  }
-  // CLAMP X
-  player.x = Math.min(
-    Math.max(player.x, 0),
-    gameState.world.width - player.width
-  );
-
-  // Y MOVEMENT
-  player.y += moveY
-  for (const obs of gameState.obstacles) {
-    if (rectsOverlap(player, obs)) {
-      player.y -= moveY;
-      break;
-    }
-  }
-  // CLAMP Y
-  player.y = Math.min(
-    Math.max(player.y, 0),
-    gameState.world.height - player.height
-  );
+  moveAndCollideAxis("x", moveX);
+  moveAndCollideAxis("y", moveY);
 
 }
