@@ -1,6 +1,7 @@
 import { gameState } from "./state";
 import { inputState } from "./input";
-import { rectsOverlap } from "./collision";
+import { rectsOverlap, CheckTileCollision } from "./collision";
+import { TILE_SIZE, isSolidAtWorldPos } from "./tilemap";
 
 const getPlayer = () => gameState.player;
 
